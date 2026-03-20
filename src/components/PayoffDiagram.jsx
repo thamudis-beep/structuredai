@@ -4,8 +4,22 @@ import { generatePayoffCurve, calcTotalReturn } from '../lib/payoff-engine';
 import SliderInput from './SliderInput';
 
 export default function PayoffDiagram({ product, strings, showControls = false }) {
-  // Interactive underlying level slider
-  const [spotLevel, setSpotLevel] = useState(100);
+  // Individual underlier sliders — one per stock
+  const underliers = product.underliers || [];
+  const [stockLevels, setStockLevels] = useState(() => {
+    const init = {};
+    underliers.forEach((u) => { init[u.ticker] = 100; });
+    return init;
+  });
+
+  const updateStockLevel = (ticker, value) => {
+    setStockLevels((prev) => ({ ...prev, [ticker]: value }));
+  };
+
+  // Derive worst-of level from individual stock levels
+  const stockValues = underliers.map((u) => stockLevels[u.ticker] ?? 100);
+  const worstOfLevel = stockValues.length > 0 ? Math.min(...stockValues) : 100;
+  const worstPerformer = underliers.find((u) => (stockLevels[u.ticker] ?? 100) === worstOfLevel);
 
   // Optional advanced controls
   const [barrierOverride, setBarrierOverride] = useState(product.barrier.level * 100);
@@ -24,10 +38,10 @@ export default function PayoffDiagram({ product, strings, showControls = false }
   // Generate curve data
   const data = useMemo(() => generatePayoffCurve(effectiveProduct, 0, 2.0, 200), [effectiveProduct]);
 
-  // Current point calculation
+  // Current point calculation — use worst-of level
   const currentReturn = useMemo(
-    () => calcTotalReturn(effectiveProduct, spotLevel / 100),
-    [effectiveProduct, spotLevel]
+    () => calcTotalReturn(effectiveProduct, worstOfLevel / 100),
+    [effectiveProduct, worstOfLevel]
   );
 
   const barrierPct = effectiveProduct.barrier.level * 100;
@@ -38,11 +52,17 @@ export default function PayoffDiagram({ product, strings, showControls = false }
   return (
     <div>
       {/* Return readout */}
-      <div className="flex items-baseline gap-6 mb-5">
+      <div className="flex items-baseline gap-6 mb-5 flex-wrap">
         <div>
-          <div className="text-xs text-text-ghost mb-0.5">{strings.underlyingPrice}</div>
-          <div className="text-lg font-mono font-semibold text-text tabular-nums">{spotLevel.toFixed(0)}%</div>
+          <div className="text-xs text-text-ghost mb-0.5">{strings.worstOfLevel || 'Worst-Of Level'}</div>
+          <div className="text-lg font-mono font-semibold text-text tabular-nums">{worstOfLevel.toFixed(0)}%</div>
         </div>
+        {worstPerformer && (
+          <div>
+            <div className="text-xs text-text-ghost mb-0.5">{strings.worstPerformer || 'Worst Performer'}</div>
+            <div className="text-sm font-mono font-semibold text-red-400">{worstPerformer.ticker}</div>
+          </div>
+        )}
         <div>
           <div className="text-xs text-text-ghost mb-0.5">{strings.yourReturn}</div>
           <div className={`text-lg font-mono font-semibold tabular-nums ${pnl >= 0 ? 'text-emerald-500' : 'text-red-400'}`}>
@@ -107,9 +127,9 @@ export default function PayoffDiagram({ product, strings, showControls = false }
               strokeDasharray="2 2"
               strokeOpacity={0.4}
             />
-            {/* Current spot indicator */}
+            {/* Current worst-of indicator */}
             <ReferenceLine
-              x={spotLevel}
+              x={worstOfLevel}
               stroke="rgb(var(--text))"
               strokeWidth={1.5}
               strokeOpacity={0.4}
@@ -125,17 +145,25 @@ export default function PayoffDiagram({ product, strings, showControls = false }
         </ResponsiveContainer>
       </div>
 
-      {/* Spot slider */}
-      <div className="mt-4 max-w-md">
-        <SliderInput
-          label={strings.underlyingPrice}
-          value={spotLevel}
-          min={0}
-          max={200}
-          step={1}
-          onChange={setSpotLevel}
-          formatValue={(v) => `${v}%`}
-        />
+      {/* Per-underlier sliders */}
+      <div className="mt-4 max-w-md space-y-0">
+        {underliers.map((u) => {
+          const level = stockLevels[u.ticker] ?? 100;
+          const isWorst = worstPerformer && worstPerformer.ticker === u.ticker;
+          return (
+            <div key={u.ticker} className={isWorst ? 'pl-2 border-l-2 border-red-400/60' : 'pl-2 border-l-2 border-transparent'}>
+              <SliderInput
+                label={`${u.ticker} — ${u.name}`}
+                value={level}
+                min={0}
+                max={200}
+                step={1}
+                onChange={(v) => updateStockLevel(u.ticker, v)}
+                formatValue={(v) => `${v}%${isWorst ? ' (worst)' : ''}`}
+              />
+            </div>
+          );
+        })}
       </div>
 
       {/* Advanced controls (FA mode only) */}

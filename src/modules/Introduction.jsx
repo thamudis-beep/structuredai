@@ -22,10 +22,10 @@ function HeroSection({ s, onAnalyze }) {
     <Section title={s.introTitle}>
       <p className="text-sm text-text-secondary leading-relaxed max-w-3xl">{s.introDesc}</p>
       <div className="flex flex-wrap gap-3 mt-5">
-        <InfoPill label="1–5 year" sub="maturity" />
-        <InfoPill label="Hold to" sub="maturity" />
-        <InfoPill label="Issuer" sub="credit risk" />
-        <InfoPill label="Not" sub="FDIC insured" />
+        <InfoPill label={s.pill1to5Year} sub={s.pillMaturity} />
+        <InfoPill label={s.pillHoldTo} sub={s.pillMaturity} />
+        <InfoPill label={s.pillIssuer} sub={s.pillCreditRisk} />
+        <InfoPill label={s.pillNot} sub={s.pillFdicInsured} />
       </div>
       {onAnalyze && (
         <button
@@ -51,22 +51,22 @@ function InfoPill({ label, sub }) {
 /* ─── Section 2: How It Works — equity-focused ─── */
 function BuildingBlocksSection({ s }) {
   return (
-    <Section title="How It Works">
+    <Section title={s.introHowItWorks}>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <StepCard num="1" title="Pick the stocks" desc="You choose the equities — individual names like META, NVDA, AMZN or an index like S&P 500." />
-        <StepCard num="2" title="Set the terms" desc="Define your trade-offs: how much downside protection (buffer), what coupon you earn, and for how long (tenor)." />
-        <StepCard num="3" title="Issuer structures the note" desc="The bank packages equity exposure with embedded derivatives to create the custom risk/return profile." />
-        <StepCard num="4" title="Get paid based on performance" desc="At maturity, your return depends on how the stocks performed relative to the barriers and caps you agreed to." />
+        <StepCard num="1" title={s.introStep1Title} desc={s.introStep1Desc} />
+        <StepCard num="2" title={s.introStep2Title} desc={s.introStep2Desc} />
+        <StepCard num="3" title={s.introStep3Title} desc={s.introStep3Desc} />
+        <StepCard num="4" title={s.introStep4Title} desc={s.introStep4Desc} />
       </div>
 
       {/* Visual: the trade-off */}
       <div className="mt-6 bg-bg-surface border border-bg-border rounded-lg p-5">
-        <div className="text-xs text-text-ghost uppercase tracking-wider mb-4">The Core Trade-Off</div>
+        <div className="text-xs text-text-ghost uppercase tracking-wider mb-4">{s.coreTradeOff}</div>
         <svg viewBox="0 0 600 70" className="w-full max-w-2xl h-16">
           {/* You give up */}
           <rect x="0" y="10" width="180" height="50" rx="6" fill="rgb(var(--bg-border))" stroke="rgb(var(--text-ghost))" strokeWidth="0.5" />
-          <text x="90" y="30" textAnchor="middle" fontSize="9" fill="rgb(var(--text-muted))" fontWeight="600">You give up</text>
-          <text x="90" y="46" textAnchor="middle" fontSize="8" fill="rgb(var(--text-ghost))">Unlimited upside + dividends</text>
+          <text x="90" y="30" textAnchor="middle" fontSize="9" fill="rgb(var(--text-muted))" fontWeight="600">{s.tradeOffYouGiveUp}</text>
+          <text x="90" y="46" textAnchor="middle" fontSize="8" fill="rgb(var(--text-ghost))">{s.tradeOffYouGiveUpDesc}</text>
 
           {/* Arrow */}
           <line x1="190" y1="35" x2="220" y2="35" stroke="rgb(var(--text-ghost))" strokeWidth="1" />
@@ -74,9 +74,9 @@ function BuildingBlocksSection({ s }) {
 
           {/* Structured Note */}
           <rect x="230" y="5" width="140" height="60" rx="6" fill="rgb(var(--bg-border))" stroke="rgb(var(--text-muted))" strokeWidth="0.7" />
-          <text x="300" y="28" textAnchor="middle" fontSize="10" fill="rgb(var(--text))" fontWeight="600">Structured Note</text>
-          <text x="300" y="43" textAnchor="middle" fontSize="8" fill="rgb(var(--text-ghost))">Equity-linked payoff</text>
-          <text x="300" y="55" textAnchor="middle" fontSize="7" fill="rgb(var(--text-ghost))">Issuer credit risk applies</text>
+          <text x="300" y="28" textAnchor="middle" fontSize="10" fill="rgb(var(--text))" fontWeight="600">{s.tradeOffStructuredNote}</text>
+          <text x="300" y="43" textAnchor="middle" fontSize="8" fill="rgb(var(--text-ghost))">{s.tradeOffEquityLinked}</text>
+          <text x="300" y="55" textAnchor="middle" fontSize="7" fill="rgb(var(--text-ghost))">{s.tradeOffIssuerCredit}</text>
 
           {/* Arrow */}
           <line x1="380" y1="35" x2="410" y2="35" stroke="rgb(var(--text-ghost))" strokeWidth="1" />
@@ -84,8 +84,8 @@ function BuildingBlocksSection({ s }) {
 
           {/* You get */}
           <rect x="420" y="10" width="180" height="50" rx="6" fill="rgb(var(--bg-border))" stroke="rgb(var(--text-ghost))" strokeWidth="0.5" />
-          <text x="510" y="30" textAnchor="middle" fontSize="9" fill="rgb(var(--text-muted))" fontWeight="600">You get</text>
-          <text x="510" y="46" textAnchor="middle" fontSize="8" fill="rgb(var(--text-ghost))">Downside protection + enhanced income</text>
+          <text x="510" y="30" textAnchor="middle" fontSize="9" fill="rgb(var(--text-muted))" fontWeight="600">{s.tradeOffYouGet}</text>
+          <text x="510" y="46" textAnchor="middle" fontSize="8" fill="rgb(var(--text-ghost))">{s.tradeOffYouGetDesc}</text>
         </svg>
       </div>
     </Section>
@@ -168,45 +168,6 @@ function PayoffPlayground({ s }) {
   const categoryColors = { growth: 'text-emerald-500', protection: 'text-blue-400', income: 'text-amber-400' };
   const categoryLabels = { growth: s.objGrowth, protection: s.objProtection, income: s.objIncome };
 
-  // Compute annotation points for chart labels
-  const annotations = useMemo(() => {
-    const a = [];
-    const p = params;
-    // Cap annotation
-    if (p.cap != null) {
-      const capPct = p.cap * 100;
-      const maxRet = config.fn(p.cap, p);
-      a.push({ x: capPct, y: maxRet * 100, label: `${capPct.toFixed(0)}% Cap`, anchor: 'start' });
-      // Max return label
-      const lev = p.leverage || 1;
-      const maxRetPct = maxRet * 100;
-      a.push({ x: capPct + 3, y: maxRetPct, label: `${maxRetPct.toFixed(0)}% Max Return`, anchor: 'start', color: 'emerald' });
-    }
-    if (p.maxReturn != null && p.cap == null) {
-      const mrPct = p.maxReturn * 100;
-      a.push({ x: mrPct, y: mrPct, label: `${mrPct.toFixed(0)}% Max Return`, anchor: 'start', color: 'emerald' });
-    }
-    // Buffer annotation
-    if (p.buffer != null) {
-      a.push({ x: -p.buffer * 100, y: 0, label: `${(p.buffer * 100).toFixed(0)}% Buffer`, anchor: 'end', color: 'red' });
-    }
-    // Protection annotation
-    if (p.protection != null && p.protection >= 1) {
-      a.push({ x: -30, y: 0, label: '100% Protected', anchor: 'middle', color: 'blue' });
-    }
-    // Leverage annotation
-    if (p.leverage != null && p.leverage > 1) {
-      const midCap = (p.cap || 0.10) * 50; // halfway to cap
-      const midRet = config.fn(midCap / 100, p) * 100;
-      a.push({ x: midCap, y: midRet, label: `${p.leverage}x Leverage`, anchor: 'start' });
-    }
-    // Coupon annotation
-    if (p.coupon != null) {
-      a.push({ x: 15, y: p.coupon * 100, label: `${(p.coupon * 100).toFixed(1)}% Coupon`, anchor: 'start', color: 'amber' });
-    }
-    return a;
-  }, [config, params]);
-
   return (
     <Section title={s.payoffPlayground}>
       <p className="text-xs text-text-muted mb-5">{s.playgroundDesc}</p>
@@ -249,14 +210,14 @@ function PayoffPlayground({ s }) {
                   tickFormatter={(v) => `${v}%`}
                   ticks={[-50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50]}
                 >
-                  <Label value="Underlying Return" position="bottom" offset={0} style={{ fontSize: 12, fill: 'rgb(var(--text-ghost))' }} />
+                  <Label value={s.underlyingReturn} position="bottom" offset={0} style={{ fontSize: 12, fill: 'rgb(var(--text-ghost))' }} />
                 </XAxis>
                 <YAxis
                   tick={{ fontSize: 12, fill: 'rgb(var(--text-ghost))' }}
                   tickFormatter={(v) => `${v}%`}
                   domain={['auto', 'auto']}
                 >
-                  <Label value="Note Return" angle={-90} position="insideLeft" offset={0} style={{ fontSize: 12, fill: 'rgb(var(--text-ghost))' }} />
+                  <Label value={s.noteReturn} angle={-90} position="insideLeft" offset={0} style={{ fontSize: 12, fill: 'rgb(var(--text-ghost))' }} />
                 </YAxis>
                 <Tooltip
                   content={({ active, payload }) => {
@@ -274,7 +235,7 @@ function PayoffPlayground({ s }) {
                 {/* Break-even lines */}
                 <ReferenceLine y={0} stroke="rgb(var(--text-ghost))" strokeDasharray="2 2" strokeOpacity={0.3} />
                 <ReferenceLine x={0} stroke="rgb(var(--text-ghost))" strokeDasharray="2 2" strokeOpacity={0.3}>
-                  <Label value="Point of Investment" position="top" style={{ fontSize: 11, fill: 'rgb(var(--text-ghost))' }} />
+                  <Label value={s.pointOfInvestment} position="top" style={{ fontSize: 11, fill: 'rgb(var(--text-ghost))' }} />
                 </ReferenceLine>
 
                 {/* Buffer reference line with label */}
@@ -286,7 +247,7 @@ function PayoffPlayground({ s }) {
                     strokeOpacity={0.6}
                   >
                     <Label
-                      value={`-${(params.buffer * 100).toFixed(0)}% Buffer`}
+                      value={`-${(params.buffer * 100).toFixed(0)}% ${s.buffer}`}
                       position="top"
                       style={{ fontSize: 11, fill: 'rgb(239, 68, 68)' }}
                     />
@@ -302,7 +263,7 @@ function PayoffPlayground({ s }) {
                     strokeOpacity={0.6}
                   >
                     <Label
-                      value={`${(params.cap * 100).toFixed(0)}% Cap`}
+                      value={`${(params.cap * 100).toFixed(0)}% ${s.cap}`}
                       position="top"
                       style={{ fontSize: 11, fill: 'rgb(34, 197, 94)' }}
                     />
@@ -322,7 +283,7 @@ function PayoffPlayground({ s }) {
                       strokeOpacity={0.4}
                     >
                       <Label
-                        value={`${maxRet.toFixed(0)}% Max Return`}
+                        value={`${maxRet.toFixed(0)}% ${s.maxReturn}`}
                         position="right"
                         style={{ fontSize: 11, fill: 'rgb(34, 197, 94)' }}
                       />
@@ -339,7 +300,7 @@ function PayoffPlayground({ s }) {
                     strokeOpacity={0.5}
                   >
                     <Label
-                      value={`${(params.coupon * 100).toFixed(1)}% Coupon`}
+                      value={`${(params.coupon * 100).toFixed(1)}% ${s.coupon}`}
                       position="right"
                       style={{ fontSize: 11, fill: 'rgb(245, 158, 11)' }}
                     />
@@ -356,7 +317,7 @@ function PayoffPlayground({ s }) {
                       stroke="transparent"
                     >
                       <Label
-                        value={`${params.leverage}x Upside Leverage`}
+                        value={`${params.leverage}x ${s.upsideLeverage}`}
                         position="insideTopRight"
                         style={{ fontSize: 11, fill: 'rgb(var(--text-muted))' }}
                       />
@@ -368,7 +329,7 @@ function PayoffPlayground({ s }) {
                 {selectedType === 'returnEnhanced' && (
                   <ReferenceLine x={-25} stroke="transparent">
                     <Label
-                      value="1x Downside Participation"
+                      value={`1x ${s.downsideParticipation}`}
                       position="insideBottomLeft"
                       style={{ fontSize: 11, fill: 'rgb(var(--text-ghost))' }}
                     />
@@ -379,7 +340,7 @@ function PayoffPlayground({ s }) {
                 {params.buffer != null && selectedType !== 'marketProtection' && selectedType !== 'dualDirectional' && (
                   <ReferenceLine x={-40} stroke="transparent">
                     <Label
-                      value={`${(1 / (1 - params.buffer) * 100).toFixed(0)}% Downside Participation`}
+                      value={`${(1 / (1 - params.buffer) * 100).toFixed(0)}% ${s.downsideParticipation}`}
                       position="insideBottomLeft"
                       style={{ fontSize: 11, fill: 'rgb(var(--text-ghost))' }}
                     />
@@ -395,7 +356,7 @@ function PayoffPlayground({ s }) {
                   strokeDasharray="4 3"
                   dot={false}
                   strokeOpacity={0.35}
-                  name="Direct Exposure"
+                  name={s.directExposure}
                 />
                 {/* Note return (solid) */}
                 <Line
@@ -404,7 +365,7 @@ function PayoffPlayground({ s }) {
                   stroke="rgb(var(--text))"
                   strokeWidth={2.5}
                   dot={false}
-                  name="Note Return"
+                  name={s.noteReturn}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -444,7 +405,7 @@ function PayoffPlayground({ s }) {
 
           {/* Outcome table */}
           <div className="mt-4 bg-bg-surface border border-bg-border rounded-lg p-4 flex-1">
-            <div className="text-xs text-text-ghost uppercase tracking-wider mb-3">Outcomes at Maturity</div>
+            <div className="text-xs text-text-ghost uppercase tracking-wider mb-3">{s.outcomesAtMaturity}</div>
             <OutcomeTable config={config} params={params} s={s} />
           </div>
         </div>
