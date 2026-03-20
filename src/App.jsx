@@ -155,7 +155,7 @@ function App() {
       {/* Main content */}
       <main className="max-w-[1440px] mx-auto px-8 py-8">
         {mode === 'intro' && (
-          <Introduction strings={s} onAnalyze={() => setMode('fa')} />
+          <Introduction strings={s} />
         )}
 
         {mode === 'fa' && (

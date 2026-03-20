@@ -52,35 +52,35 @@ export default function PayoffDiagram({ product, strings, showControls = false }
   return (
     <div>
       {/* Return readout */}
-      <div className="flex items-baseline gap-6 mb-5 flex-wrap">
+      <div className="flex items-baseline gap-8 mb-6 flex-wrap">
         <div>
-          <div className="text-xs text-text-ghost mb-0.5">{strings.worstOfLevel || 'Worst-Of Level'}</div>
-          <div className="text-lg font-mono font-semibold text-text tabular-nums">{worstOfLevel.toFixed(0)}%</div>
+          <div className="text-sm text-text-ghost mb-0.5">{strings.worstOfLevel || 'Worst-Of Level'}</div>
+          <div className="text-xl font-mono font-semibold text-text tabular-nums">{worstOfLevel.toFixed(0)}%</div>
         </div>
         {worstPerformer && (
           <div>
-            <div className="text-xs text-text-ghost mb-0.5">{strings.worstPerformer || 'Worst Performer'}</div>
-            <div className="text-sm font-mono font-semibold text-red-400">{worstPerformer.ticker}</div>
+            <div className="text-sm text-text-ghost mb-0.5">{strings.worstPerformer || 'Worst Performer'}</div>
+            <div className="text-base font-mono font-semibold text-red-400">{worstPerformer.ticker}</div>
           </div>
         )}
         <div>
-          <div className="text-xs text-text-ghost mb-0.5">{strings.yourReturn}</div>
-          <div className={`text-lg font-mono font-semibold tabular-nums ${pnl >= 0 ? 'text-emerald-500' : 'text-red-400'}`}>
+          <div className="text-sm text-text-ghost mb-0.5">{strings.yourReturn}</div>
+          <div className={`text-xl font-mono font-semibold tabular-nums ${pnl >= 0 ? 'text-emerald-500' : 'text-red-400'}`}>
             {pnl >= 0 ? '+' : ''}{((currentReturn.total - 1) * 100).toFixed(1)}%
           </div>
         </div>
         <div>
-          <div className="text-xs text-text-ghost mb-0.5">{strings.onNotional} ${(notional / 1e6).toFixed(1)}M</div>
-          <div className={`text-sm font-mono tabular-nums ${pnl >= 0 ? 'text-emerald-500' : 'text-red-400'}`}>
+          <div className="text-sm text-text-ghost mb-0.5">{strings.onNotional} ${(notional / 1e6).toFixed(1)}M</div>
+          <div className={`text-base font-mono tabular-nums ${pnl >= 0 ? 'text-emerald-500' : 'text-red-400'}`}>
             {pnl >= 0 ? '+' : ''}${(pnl / 1000).toFixed(0)}k
           </div>
         </div>
       </div>
 
       {/* Chart */}
-      <div className="w-full h-64">
+      <div className="w-full h-80">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={data} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
+          <AreaChart data={data} margin={{ top: 25, right: 30, left: 10, bottom: 5 }}>
             <defs>
               <linearGradient id="payoffGrad" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="rgb(var(--text))" stopOpacity={0.08} />
@@ -90,12 +90,12 @@ export default function PayoffDiagram({ product, strings, showControls = false }
             <CartesianGrid strokeDasharray="3 3" stroke="rgb(var(--bg-border))" strokeOpacity={0.5} />
             <XAxis
               dataKey="level"
-              tick={{ fontSize: 10, fill: 'rgb(var(--text-ghost))' }}
+              tick={{ fontSize: 13, fill: 'rgb(var(--text-ghost))' }}
               tickFormatter={(v) => `${v}%`}
               ticks={[0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200]}
             />
             <YAxis
-              tick={{ fontSize: 10, fill: 'rgb(var(--text-ghost))' }}
+              tick={{ fontSize: 13, fill: 'rgb(var(--text-ghost))' }}
               tickFormatter={(v) => `${v}%`}
               domain={['auto', 'auto']}
             />
@@ -104,9 +104,9 @@ export default function PayoffDiagram({ product, strings, showControls = false }
                 if (!active || !payload?.length) return null;
                 const d = payload[0].payload;
                 return (
-                  <div className="bg-bg-surface border border-bg-border rounded px-3 py-2 text-xs">
+                  <div className="bg-bg-surface border border-bg-border rounded px-3 py-2 text-sm">
                     <div className="text-text-muted mb-1">Underlying: {d.level}%</div>
-                    <div className="text-text">Total return: {d.total}%</div>
+                    <div className="text-text font-medium">Total return: {d.total}%</div>
                     <div className="text-text-ghost">Principal: {d.principal}% | Coupon: {d.coupon}%</div>
                   </div>
                 );
@@ -117,8 +117,8 @@ export default function PayoffDiagram({ product, strings, showControls = false }
               x={Math.round(barrierPct * 10) / 10}
               stroke="rgb(239, 68, 68)"
               strokeDasharray="4 3"
-              strokeOpacity={0.6}
-              label={{ value: `Barrier ${barrierPct}%`, position: 'top', fontSize: 10, fill: 'rgb(239, 68, 68)' }}
+              strokeOpacity={0.7}
+              label={{ value: `Barrier ${barrierPct}%`, position: 'top', fontSize: 13, fill: 'rgb(239, 68, 68)', fontWeight: 600 }}
             />
             {/* Break-even line at 100% */}
             <ReferenceLine

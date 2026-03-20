@@ -3,10 +3,10 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, ReferenceLine, Tooltip, R
 import { PRODUCT_TYPES, generateIntroPayoffData } from '../lib/intro-payoffs';
 import SliderInput from '../components/SliderInput';
 
-export default function Introduction({ strings: s, onAnalyze }) {
+export default function Introduction({ strings: s }) {
   return (
     <div className="space-y-8">
-      <HeroSection s={s} onAnalyze={onAnalyze} />
+      <HeroSection s={s} />
       <BuildingBlocksSection s={s} />
       <ThreeObjectivesSection s={s} />
       <PayoffPlayground s={s} />
@@ -16,11 +16,11 @@ export default function Introduction({ strings: s, onAnalyze }) {
   );
 }
 
-/* ─── Section 1: Hero — clean, simple ─── */
-function HeroSection({ s, onAnalyze }) {
+/* ─── Section 1: Hero ─── */
+function HeroSection({ s }) {
   return (
     <Section title={s.introTitle}>
-      <p className="text-sm text-text-secondary leading-relaxed max-w-3xl">{s.introDesc}</p>
+      <p className="text-base text-text-secondary leading-relaxed max-w-3xl">{s.introDesc}</p>
       <div className="flex flex-wrap gap-3 mt-5">
         <InfoPill label={s.pill1to5Year} sub={s.pillMaturity} />
         <InfoPill label={s.pillHoldTo} sub={s.pillMaturity} />
@@ -33,14 +33,14 @@ function HeroSection({ s, onAnalyze }) {
 
 function InfoPill({ label, sub }) {
   return (
-    <div className="bg-bg-surface border border-bg-border rounded-full px-4 py-1.5 flex items-center gap-1.5">
-      <span className="text-xs font-medium text-text">{label}</span>
-      <span className="text-2xs text-text-ghost">{sub}</span>
+    <div className="bg-bg-surface border border-bg-border rounded-full px-5 py-2 flex items-center gap-2">
+      <span className="text-sm font-medium text-text">{label}</span>
+      <span className="text-xs text-text-ghost">{sub}</span>
     </div>
   );
 }
 
-/* ─── Section 2: How It Works — equity-focused ─── */
+/* ─── Section 2: How It Works ─── */
 function BuildingBlocksSection({ s }) {
   return (
     <Section title={s.introHowItWorks}>
@@ -52,33 +52,29 @@ function BuildingBlocksSection({ s }) {
       </div>
 
       {/* Visual: the trade-off */}
-      <div className="mt-6 bg-bg-surface border border-bg-border rounded-lg p-5">
-        <div className="text-xs text-text-ghost uppercase tracking-wider mb-4">{s.coreTradeOff}</div>
-        <svg viewBox="0 0 600 70" className="w-full max-w-2xl h-16">
-          {/* You give up */}
-          <rect x="0" y="10" width="180" height="50" rx="6" fill="rgb(var(--bg-border))" stroke="rgb(var(--text-ghost))" strokeWidth="0.5" />
-          <text x="90" y="30" textAnchor="middle" fontSize="9" fill="rgb(var(--text-muted))" fontWeight="600">{s.tradeOffYouGiveUp}</text>
-          <text x="90" y="46" textAnchor="middle" fontSize="8" fill="rgb(var(--text-ghost))">{s.tradeOffYouGiveUpDesc}</text>
-
-          {/* Arrow */}
-          <line x1="190" y1="35" x2="220" y2="35" stroke="rgb(var(--text-ghost))" strokeWidth="1" />
-          <polygon points="218,31 226,35 218,39" fill="rgb(var(--text-ghost))" />
-
-          {/* Structured Note */}
-          <rect x="230" y="5" width="140" height="60" rx="6" fill="rgb(var(--bg-border))" stroke="rgb(var(--text-muted))" strokeWidth="0.7" />
-          <text x="300" y="28" textAnchor="middle" fontSize="10" fill="rgb(var(--text))" fontWeight="600">{s.tradeOffStructuredNote}</text>
-          <text x="300" y="43" textAnchor="middle" fontSize="8" fill="rgb(var(--text-ghost))">{s.tradeOffEquityLinked}</text>
-          <text x="300" y="55" textAnchor="middle" fontSize="7" fill="rgb(var(--text-ghost))">{s.tradeOffIssuerCredit}</text>
-
-          {/* Arrow */}
-          <line x1="380" y1="35" x2="410" y2="35" stroke="rgb(var(--text-ghost))" strokeWidth="1" />
-          <polygon points="408,31 416,35 408,39" fill="rgb(var(--text-ghost))" />
-
-          {/* You get */}
-          <rect x="420" y="10" width="180" height="50" rx="6" fill="rgb(var(--bg-border))" stroke="rgb(var(--text-ghost))" strokeWidth="0.5" />
-          <text x="510" y="30" textAnchor="middle" fontSize="9" fill="rgb(var(--text-muted))" fontWeight="600">{s.tradeOffYouGet}</text>
-          <text x="510" y="46" textAnchor="middle" fontSize="8" fill="rgb(var(--text-ghost))">{s.tradeOffYouGetDesc}</text>
-        </svg>
+      <div className="mt-6 bg-bg-surface border border-bg-border rounded-lg p-6">
+        <div className="text-sm text-text-ghost uppercase tracking-wider mb-5">{s.coreTradeOff}</div>
+        <div className="flex items-center gap-4 max-w-3xl">
+          <div className="flex-1 border border-bg-border rounded-lg p-5 text-center">
+            <div className="text-base font-medium text-red-400 mb-1">{s.tradeOffYouGiveUp}</div>
+            <div className="text-sm text-text-muted">{s.tradeOffYouGiveUpDesc}</div>
+          </div>
+          <svg className="w-8 h-8 text-text-ghost flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
+          <div className="flex-1 border border-bg-border-light rounded-lg p-5 text-center bg-bg">
+            <div className="text-base font-semibold text-text mb-1">{s.tradeOffStructuredNote}</div>
+            <div className="text-sm text-text-muted">{s.tradeOffEquityLinked}</div>
+            <div className="text-xs text-text-ghost mt-1">{s.tradeOffIssuerCredit}</div>
+          </div>
+          <svg className="w-8 h-8 text-text-ghost flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
+          <div className="flex-1 border border-bg-border rounded-lg p-5 text-center">
+            <div className="text-base font-medium text-emerald-500 mb-1">{s.tradeOffYouGet}</div>
+            <div className="text-sm text-text-muted">{s.tradeOffYouGetDesc}</div>
+          </div>
+        </div>
       </div>
     </Section>
   );
@@ -86,10 +82,10 @@ function BuildingBlocksSection({ s }) {
 
 function StepCard({ num, title, desc }) {
   return (
-    <div className="bg-bg-surface border border-bg-border rounded-lg p-4">
-      <div className="w-6 h-6 rounded-full border border-bg-border-light flex items-center justify-center text-xs font-mono font-semibold text-text-muted mb-2">{num}</div>
-      <div className="text-xs font-medium text-text mb-1">{title}</div>
-      <p className="text-2xs text-text-muted leading-relaxed">{desc}</p>
+    <div className="bg-bg-surface border border-bg-border rounded-lg p-5">
+      <div className="w-7 h-7 rounded-full border border-bg-border-light flex items-center justify-center text-sm font-mono font-semibold text-text-muted mb-3">{num}</div>
+      <div className="text-sm font-medium text-text mb-1.5">{title}</div>
+      <p className="text-xs text-text-muted leading-relaxed">{desc}</p>
     </div>
   );
 }
@@ -105,12 +101,12 @@ function ThreeObjectivesSection({ s }) {
     <Section title={s.threeObjectives}>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {objectives.map((o) => (
-          <div key={o.key} className="bg-bg-surface border border-bg-border rounded-lg p-5 hover:border-bg-border-light transition-all">
-            <svg className="w-6 h-6 text-text-muted mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <div key={o.key} className="bg-bg-surface border border-bg-border rounded-lg p-6 hover:border-bg-border-light transition-all">
+            <svg className="w-7 h-7 text-text-muted mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d={o.icon} />
             </svg>
-            <div className="text-sm font-medium text-text mb-2">{o.title}</div>
-            <p className="text-xs text-text-muted leading-relaxed">{o.desc}</p>
+            <div className="text-base font-medium text-text mb-2">{o.title}</div>
+            <p className="text-sm text-text-muted leading-relaxed">{o.desc}</p>
           </div>
         ))}
       </div>
@@ -162,7 +158,7 @@ function PayoffPlayground({ s }) {
 
   return (
     <Section title={s.payoffPlayground}>
-      <p className="text-xs text-text-muted mb-5">{s.playgroundDesc}</p>
+      <p className="text-sm text-text-muted mb-5">{s.playgroundDesc}</p>
 
       {/* Product type selector */}
       <div className="flex flex-wrap gap-2 mb-6">
@@ -170,7 +166,7 @@ function PayoffPlayground({ s }) {
           <button
             key={p.id}
             onClick={() => handleTypeChange(p.id)}
-            className={`px-3 py-1.5 text-xs rounded-md border transition-all ${
+            className={`px-4 py-2 text-sm rounded-md border transition-all ${
               selectedType === p.id
                 ? 'bg-bg-surface text-text border-bg-border-light'
                 : 'text-text-muted border-bg-border hover:text-text-secondary hover:border-bg-border-light'
@@ -183,40 +179,40 @@ function PayoffPlayground({ s }) {
 
       {/* Selected product info */}
       <div className="mb-5 flex items-center gap-3">
-        <span className={`text-2xs uppercase tracking-wider font-medium ${categoryColors[config.category]}`}>
+        <span className={`text-xs uppercase tracking-wider font-medium ${categoryColors[config.category]}`}>
           {categoryLabels[config.category]}
         </span>
-        <span className="text-xs text-text-muted">{descs[selectedType]}</span>
+        <span className="text-sm text-text-muted">{descs[selectedType]}</span>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Chart — tall to match sidebar */}
+        {/* Chart */}
         <div className="lg:col-span-2">
-          <div className="w-full" style={{ height: 420 }}>
+          <div className="w-full" style={{ height: 460 }}>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={data} margin={{ top: 20, right: 30, left: 10, bottom: 20 }}>
+              <LineChart data={data} margin={{ top: 30, right: 50, left: 20, bottom: 30 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgb(var(--bg-border))" strokeOpacity={0.5} />
                 <XAxis
                   dataKey="underlying"
-                  tick={{ fontSize: 12, fill: 'rgb(var(--text-ghost))' }}
+                  tick={{ fontSize: 13, fill: 'rgb(var(--text-ghost))' }}
                   tickFormatter={(v) => `${v}%`}
                   ticks={[-50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50]}
                 >
-                  <Label value={s.underlyingReturn} position="bottom" offset={0} style={{ fontSize: 12, fill: 'rgb(var(--text-ghost))' }} />
+                  <Label value={s.underlyingReturn} position="bottom" offset={5} style={{ fontSize: 13, fill: 'rgb(var(--text-muted))' }} />
                 </XAxis>
                 <YAxis
-                  tick={{ fontSize: 12, fill: 'rgb(var(--text-ghost))' }}
+                  tick={{ fontSize: 13, fill: 'rgb(var(--text-ghost))' }}
                   tickFormatter={(v) => `${v}%`}
                   domain={['auto', 'auto']}
                 >
-                  <Label value={s.noteReturn} angle={-90} position="insideLeft" offset={0} style={{ fontSize: 12, fill: 'rgb(var(--text-ghost))' }} />
+                  <Label value={s.noteReturn} angle={-90} position="insideLeft" offset={5} style={{ fontSize: 13, fill: 'rgb(var(--text-muted))' }} />
                 </YAxis>
                 <Tooltip
                   content={({ active, payload }) => {
                     if (!active || !payload?.length) return null;
                     const d = payload[0].payload;
                     return (
-                      <div className="bg-bg-surface border border-bg-border rounded px-3 py-2 text-xs">
+                      <div className="bg-bg-surface border border-bg-border rounded px-3 py-2 text-sm">
                         <div className="text-text-muted mb-1">{s.underlyingReturn}: {d.underlying}%</div>
                         <div className="text-text font-medium">{s.noteReturn}: {d.note}%</div>
                         <div className="text-text-ghost">{s.directExposure}: {d.directReturn}%</div>
@@ -227,37 +223,39 @@ function PayoffPlayground({ s }) {
                 {/* Break-even lines */}
                 <ReferenceLine y={0} stroke="rgb(var(--text-ghost))" strokeDasharray="2 2" strokeOpacity={0.3} />
                 <ReferenceLine x={0} stroke="rgb(var(--text-ghost))" strokeDasharray="2 2" strokeOpacity={0.3}>
-                  <Label value={s.pointOfInvestment} position="top" style={{ fontSize: 11, fill: 'rgb(var(--text-ghost))' }} />
+                  <Label value={s.pointOfInvestment} position="top" offset={8} style={{ fontSize: 13, fill: 'rgb(var(--text-muted))', fontWeight: 500 }} />
                 </ReferenceLine>
 
-                {/* Buffer reference line with label */}
+                {/* Buffer reference line */}
                 {params.buffer != null && (
                   <ReferenceLine
                     x={Math.round(-params.buffer * 1000) / 10}
                     stroke="rgb(239, 68, 68)"
                     strokeDasharray="4 3"
-                    strokeOpacity={0.6}
+                    strokeOpacity={0.7}
                   >
                     <Label
-                      value={`-${(params.buffer * 100).toFixed(0)}% ${s.buffer}`}
-                      position="top"
-                      style={{ fontSize: 11, fill: 'rgb(239, 68, 68)' }}
+                      value={`${s.buffer} -${(params.buffer * 100).toFixed(0)}%`}
+                      position="insideTopLeft"
+                      offset={10}
+                      style={{ fontSize: 13, fill: 'rgb(239, 68, 68)', fontWeight: 600 }}
                     />
                   </ReferenceLine>
                 )}
 
-                {/* Cap reference line with label */}
+                {/* Cap reference line */}
                 {params.cap != null && (
                   <ReferenceLine
                     x={Math.round(params.cap * 1000) / 10}
                     stroke="rgb(34, 197, 94)"
                     strokeDasharray="4 3"
-                    strokeOpacity={0.6}
+                    strokeOpacity={0.7}
                   >
                     <Label
-                      value={`${(params.cap * 100).toFixed(0)}% ${s.cap}`}
-                      position="top"
-                      style={{ fontSize: 11, fill: 'rgb(34, 197, 94)' }}
+                      value={`${s.cap} ${(params.cap * 100).toFixed(0)}%`}
+                      position="insideTopRight"
+                      offset={10}
+                      style={{ fontSize: 13, fill: 'rgb(34, 197, 94)', fontWeight: 600 }}
                     />
                   </ReferenceLine>
                 )}
@@ -275,9 +273,10 @@ function PayoffPlayground({ s }) {
                       strokeOpacity={0.4}
                     >
                       <Label
-                        value={`${maxRet.toFixed(0)}% ${s.maxReturn}`}
-                        position="right"
-                        style={{ fontSize: 11, fill: 'rgb(34, 197, 94)' }}
+                        value={`${s.maxReturn} ${maxRet.toFixed(0)}%`}
+                        position="insideTopRight"
+                        offset={5}
+                        style={{ fontSize: 13, fill: 'rgb(34, 197, 94)', fontWeight: 500 }}
                       />
                     </ReferenceLine>
                   );
@@ -292,26 +291,25 @@ function PayoffPlayground({ s }) {
                     strokeOpacity={0.5}
                   >
                     <Label
-                      value={`${(params.coupon * 100).toFixed(1)}% ${s.coupon}`}
-                      position="right"
-                      style={{ fontSize: 11, fill: 'rgb(245, 158, 11)' }}
+                      value={`${s.coupon} ${(params.coupon * 100).toFixed(1)}%`}
+                      position="insideTopRight"
+                      offset={5}
+                      style={{ fontSize: 13, fill: 'rgb(245, 158, 11)', fontWeight: 500 }}
                     />
                   </ReferenceLine>
                 )}
 
-                {/* Leverage annotation — custom label via ReferenceDot workaround */}
+                {/* Leverage annotation */}
                 {params.leverage != null && params.leverage > 1 && (() => {
                   const capVal = params.cap ?? 0.10;
                   const midX = capVal * 50;
                   return (
-                    <ReferenceLine
-                      x={midX}
-                      stroke="transparent"
-                    >
+                    <ReferenceLine x={midX} stroke="transparent">
                       <Label
                         value={`${params.leverage}x ${s.upsideLeverage}`}
                         position="insideTopRight"
-                        style={{ fontSize: 11, fill: 'rgb(var(--text-muted))' }}
+                        offset={5}
+                        style={{ fontSize: 13, fill: 'rgb(var(--text-muted))', fontWeight: 500 }}
                       />
                     </ReferenceLine>
                   );
@@ -323,7 +321,8 @@ function PayoffPlayground({ s }) {
                     <Label
                       value={`1x ${s.downsideParticipation}`}
                       position="insideBottomLeft"
-                      style={{ fontSize: 11, fill: 'rgb(var(--text-ghost))' }}
+                      offset={5}
+                      style={{ fontSize: 13, fill: 'rgb(var(--text-ghost))' }}
                     />
                   </ReferenceLine>
                 )}
@@ -334,12 +333,13 @@ function PayoffPlayground({ s }) {
                     <Label
                       value={`${(1 / (1 - params.buffer) * 100).toFixed(0)}% ${s.downsideParticipation}`}
                       position="insideBottomLeft"
-                      style={{ fontSize: 11, fill: 'rgb(var(--text-ghost))' }}
+                      offset={5}
+                      style={{ fontSize: 13, fill: 'rgb(var(--text-ghost))' }}
                     />
                   </ReferenceLine>
                 )}
 
-                {/* Direct exposure (dashed line) */}
+                {/* Direct exposure (dashed) */}
                 <Line
                   type="monotone"
                   dataKey="directReturn"
@@ -363,14 +363,14 @@ function PayoffPlayground({ s }) {
             </ResponsiveContainer>
           </div>
           {/* Legend */}
-          <div className="flex items-center gap-5 mt-2">
-            <div className="flex items-center gap-1.5">
-              <div className="w-6 h-0.5 bg-text rounded" />
-              <span className="text-2xs text-text-muted">{s.noteReturn}</span>
+          <div className="flex items-center gap-6 mt-3">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-0.5 bg-text rounded" />
+              <span className="text-xs text-text-muted">{s.noteReturn}</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <div className="w-6 h-0 border-t border-dashed border-text-ghost/40" />
-              <span className="text-2xs text-text-ghost">{s.directExposure}</span>
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-0 border-t border-dashed border-text-ghost/40" />
+              <span className="text-xs text-text-ghost">{s.directExposure}</span>
             </div>
           </div>
         </div>
@@ -396,8 +396,8 @@ function PayoffPlayground({ s }) {
           </div>
 
           {/* Outcome table */}
-          <div className="mt-4 bg-bg-surface border border-bg-border rounded-lg p-4 flex-1">
-            <div className="text-xs text-text-ghost uppercase tracking-wider mb-3">{s.outcomesAtMaturity}</div>
+          <div className="mt-4 bg-bg-surface border border-bg-border rounded-lg p-5 flex-1">
+            <div className="text-sm text-text-ghost uppercase tracking-wider mb-3">{s.outcomesAtMaturity}</div>
             <OutcomeTable config={config} params={params} s={s} />
           </div>
         </div>
@@ -409,7 +409,7 @@ function PayoffPlayground({ s }) {
 function OutcomeTable({ config, params, s }) {
   const levels = [-0.30, -0.15, -0.10, -0.05, 0, 0.05, 0.10, 0.15, 0.30];
   return (
-    <table className="w-full text-xs">
+    <table className="w-full text-sm">
       <thead>
         <tr className="text-text-ghost">
           <th className="text-left pb-2 font-normal">{s.underlyingReturn}</th>
@@ -421,13 +421,12 @@ function OutcomeTable({ config, params, s }) {
           const ret = config.fn(level, params);
           const isPositive = ret > 0.001;
           const isNeg = ret < -0.001;
-          // Highlight buffer/cap boundaries
           const isBufferEdge = params.buffer && Math.abs(Math.abs(level) - params.buffer) < 0.011;
           const isCapEdge = params.cap && Math.abs(level - params.cap) < 0.011;
           return (
             <tr key={level} className={`border-t border-bg-border/50 ${isBufferEdge ? 'bg-red-500/5' : isCapEdge ? 'bg-emerald-500/5' : ''}`}>
-              <td className="py-1.5 text-text-muted tabular-nums">{(level * 100).toFixed(0)}%</td>
-              <td className={`py-1.5 text-right tabular-nums font-mono ${isPositive ? 'text-emerald-500' : isNeg ? 'text-red-400' : 'text-text-muted'}`}>
+              <td className="py-2 text-text-muted tabular-nums">{(level * 100).toFixed(0)}%</td>
+              <td className={`py-2 text-right tabular-nums font-mono ${isPositive ? 'text-emerald-500' : isNeg ? 'text-red-400' : 'text-text-muted'}`}>
                 {ret >= 0 ? '+' : ''}{(ret * 100).toFixed(1)}%
               </td>
             </tr>
@@ -448,19 +447,19 @@ function GlossarySection({ s }) {
           <button
             key={i}
             onClick={() => setOpenTerm(openTerm === i ? null : i)}
-            className="text-left bg-bg-surface border border-bg-border rounded-lg px-4 py-3 hover:border-bg-border-light transition-all"
+            className="text-left bg-bg-surface border border-bg-border rounded-lg px-5 py-4 hover:border-bg-border-light transition-all"
           >
             <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-text">{g.term}</span>
+              <span className="text-sm font-medium text-text">{g.term}</span>
               <svg
-                className={`w-3.5 h-3.5 text-text-ghost transition-transform duration-200 ${openTerm === i ? 'rotate-180' : ''}`}
+                className={`w-4 h-4 text-text-ghost transition-transform duration-200 ${openTerm === i ? 'rotate-180' : ''}`}
                 fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
               >
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
               </svg>
             </div>
             {openTerm === i && (
-              <p className="text-xs text-text-muted mt-2 leading-relaxed">{g.def}</p>
+              <p className="text-sm text-text-muted mt-2 leading-relaxed">{g.def}</p>
             )}
           </button>
         ))}
@@ -475,9 +474,9 @@ function RiskSection({ s }) {
     <Section title={s.riskConsiderations}>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {s.risks.map((r, i) => (
-          <div key={i} className="bg-bg-surface border border-bg-border rounded-lg p-4">
-            <div className="text-xs font-medium text-text mb-1.5">{r.title}</div>
-            <p className="text-xs text-text-muted leading-relaxed">{r.desc}</p>
+          <div key={i} className="bg-bg-surface border border-bg-border rounded-lg p-5">
+            <div className="text-sm font-medium text-text mb-2">{r.title}</div>
+            <p className="text-sm text-text-muted leading-relaxed">{r.desc}</p>
           </div>
         ))}
       </div>
@@ -487,8 +486,8 @@ function RiskSection({ s }) {
 
 function Section({ title, children }) {
   return (
-    <div className="bg-bg border border-bg-border/50 rounded-lg p-6">
-      <h3 className="text-xs font-medium text-text-muted uppercase tracking-wider mb-5">{title}</h3>
+    <div className="bg-bg border border-bg-border/50 rounded-lg p-8">
+      <h3 className="text-sm font-medium text-text-muted uppercase tracking-wider mb-5">{title}</h3>
       {children}
     </div>
   );
