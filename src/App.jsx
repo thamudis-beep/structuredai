@@ -26,9 +26,9 @@ function App() {
     localStorage.setItem('theme', dark ? 'dark' : 'light');
   }, [dark]);
 
-  // App state
-  const [mode, setMode] = useState('intro'); // 'intro' | 'fa' | 'client'
-  const [product, setProduct] = useState(null); // StructuredProduct | null
+  // App state — sample product loaded by default so FA/Client always work
+  const [mode, setMode] = useState('intro');
+  const [product, setProduct] = useState(SAMPLE_PRODUCT);
   const [analyzing, setAnalyzing] = useState(false);
   const [analyzeStep, setAnalyzeStep] = useState(0);
 
@@ -45,19 +45,20 @@ function App() {
     setAnalyzing(true);
     setAnalyzeStep(0);
     // TODO: POST file to /api/analyze, receive StructuredProduct JSON
-    // For now, simulate with mock data after a delay
     setTimeout(() => {
       setProduct(SAMPLE_PRODUCT);
       setAnalyzing(false);
+      setMode('fa');
     }, 4800);
   };
 
   const handleDemo = () => {
     setProduct(SAMPLE_PRODUCT);
+    setMode('fa');
   };
 
   const handleNewAnalysis = () => {
-    setProduct(null);
+    setProduct(SAMPLE_PRODUCT);
     setAnalyzing(false);
     setAnalyzeStep(0);
   };
@@ -109,92 +110,37 @@ function App() {
             </div>
           </div>
 
-          {/* Mode tabs — always show */}
+          {/* Mode tabs */}
           <div className="flex gap-0.5 mt-6">
-            {MODES.map((m) => {
-              // FA and Client tabs disabled until product loaded
-              const disabled = (m.id === 'fa' || m.id === 'client') && !product;
-              return (
-                <button
-                  key={m.id}
-                  onClick={() => !disabled && setMode(m.id)}
-                  className={`px-4 py-2 text-xs font-medium rounded-t-md transition-all ${
-                    mode === m.id
-                      ? 'bg-bg-surface text-text border border-bg-border border-b-bg-surface -mb-px'
-                      : disabled
-                        ? 'text-text-ghost/40 cursor-not-allowed'
-                        : 'text-text-muted hover:text-text-secondary'
-                  }`}
-                >
-                  {s[m.labelKey]}
-                </button>
-              );
-            })}
-            {product && (
-              <>
-                <div className="flex-1" />
-                <button
-                  onClick={handleNewAnalysis}
-                  className="px-3 py-1.5 text-xs text-text-muted hover:text-text border border-bg-border hover:border-bg-border-light rounded-md transition-all"
-                >
-                  {s.newAnalysis}
-                </button>
-              </>
-            )}
+            {MODES.map((m) => (
+              <button
+                key={m.id}
+                onClick={() => setMode(m.id)}
+                className={`px-4 py-2 text-xs font-medium rounded-t-md transition-all ${
+                  mode === m.id
+                    ? 'bg-bg-surface text-text border border-bg-border border-b-bg-surface -mb-px'
+                    : 'text-text-muted hover:text-text-secondary'
+                }`}
+              >
+                {s[m.labelKey]}
+              </button>
+            ))}
           </div>
         </div>
       </header>
 
       {/* Main content */}
       <main className="max-w-[1440px] mx-auto px-8 py-8">
-        {/* Introduction mode */}
         {mode === 'intro' && (
-          <Introduction strings={s} />
+          <Introduction strings={s} onAnalyze={() => setMode('fa')} />
         )}
 
-        {/* FA / Client modes */}
-        {mode !== 'intro' && (
-          <>
-            {/* Upload / landing */}
-            {!product && !analyzing && (
-              <TermSheetUpload
-                strings={s}
-                onFileSelect={handleFileSelect}
-                onDemo={handleDemo}
-              />
-            )}
+        {mode === 'fa' && (
+          <FAMode product={product} strings={s} />
+        )}
 
-            {/* Analyzing state */}
-            {analyzing && (
-              <div className="flex flex-col items-center justify-center min-h-[60vh]">
-                <div className="w-8 h-8 border-2 border-bg-border border-t-text rounded-full animate-spin mb-6" />
-                <p className="text-sm text-text mb-3">{s.analyzing}</p>
-                <div className="flex flex-col items-center gap-1">
-                  {s.analyzingSteps.map((step, i) => (
-                    <p
-                      key={i}
-                      className={`text-xs transition-all ${
-                        i < analyzeStep ? 'text-text-secondary' : i === analyzeStep ? 'text-text-muted' : 'text-text-ghost/40'
-                      }`}
-                    >
-                      {i < analyzeStep ? '\u2713' : i === analyzeStep ? '\u2022' : '\u00B7'} {step}
-                    </p>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Product loaded */}
-            {product && !analyzing && (
-              <div>
-                {mode === 'fa' ? (
-                  <FAMode product={product} strings={s} />
-                ) : (
-                  <ClientMode product={product} strings={s} />
-                )}
-              </div>
-            )}
-          </>
+        {mode === 'client' && (
+          <ClientMode product={product} strings={s} />
         )}
       </main>
     </div>

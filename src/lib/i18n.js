@@ -57,9 +57,7 @@ export const STRINGS = {
     // Introduction module
     introMode: 'Introduction',
     introTitle: 'What is a Structured Investment?',
-    introDesc: 'A Structured Investment combines features of a fixed income security with those of derivatives contracts, typically option contracts. The bulk of the investment is placed in a fixed income security. The balance is used in option contracts, which can potentially enhance returns, provide income or achieve some degree of protection to downside market exposure.',
-    introHeldToMaturity: 'Structured Investments commonly mature within one to five years and are intended to be held until maturity. They are debt instruments in which the payoff is linked to the performance of an underlying reference asset.',
-    introCreditRisk: 'All payments are subject to the issuer\'s creditworthiness. If the issuer defaults, it could result in the loss of some or all of your investment.',
+    introDesc: 'A structured note is a debt instrument whose return is linked to the performance of an underlying asset — like the S&P 500 or a basket of stocks. It combines a bond (for principal protection) with options (to shape the payoff). The result: custom risk/return profiles you can\'t get from stocks or bonds alone.',
     threeObjectives: 'Three Objectives',
     objGrowth: 'Growth',
     objGrowthDesc: 'May enhance potential returns based on market expectations. Provides access to targeted markets with leverage features.',
@@ -176,9 +174,7 @@ export const STRINGS = {
     // Introduction module
     introMode: 'Introducción',
     introTitle: '¿Qué es una Inversión Estructurada?',
-    introDesc: 'Una Inversión Estructurada combina características de un título de renta fija con contratos de derivados, típicamente opciones. La mayor parte de la inversión se coloca en renta fija. El resto se usa en opciones que pueden potenciar rendimientos, generar ingresos o proteger contra caídas del mercado.',
-    introHeldToMaturity: 'Las Inversiones Estructuradas generalmente vencen entre uno y cinco años y están diseñadas para mantenerse hasta el vencimiento. Son instrumentos de deuda vinculados al desempeño de un activo de referencia.',
-    introCreditRisk: 'Todos los pagos están sujetos a la solvencia del emisor. Si el emisor incumple, podría resultar en la pérdida total o parcial de su inversión.',
+    introDesc: 'Una nota estructurada es un instrumento de deuda cuyo retorno está vinculado al desempeño de un activo subyacente — como el S&P 500 o una canasta de acciones. Combina un bono (para protección del capital) con opciones (para dar forma al pago). El resultado: perfiles de riesgo/retorno personalizados imposibles con acciones o bonos solos.',
     threeObjectives: 'Tres Objetivos',
     objGrowth: 'Crecimiento',
     objGrowthDesc: 'Puede potenciar rendimientos basados en expectativas del mercado. Acceso a mercados específicos con apalancamiento.',

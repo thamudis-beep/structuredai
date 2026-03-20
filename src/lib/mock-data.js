@@ -1,7 +1,7 @@
-// Mock StructuredProduct — JP Morgan Autocallable on AAPL/MSFT/GOOGL
+// Sample StructuredProduct — Morgan Stanley Autocallable on META/AMZN/NVDA (worst-of)
 export const SAMPLE_PRODUCT = {
   productType: 'autocallable',
-  issuer: 'J.P. Morgan',
+  issuer: 'Morgan Stanley',
   notional: 1000000,
   currency: 'USD',
   tradeDate: '2026-03-15',
@@ -9,83 +9,82 @@ export const SAMPLE_PRODUCT = {
   tenor: 24, // months
 
   underliers: [
-    { ticker: 'AAPL', name: 'Apple Inc.', initialLevel: 227.50, weight: 0.333 },
-    { ticker: 'MSFT', name: 'Microsoft Corp.', initialLevel: 420.80, weight: 0.333 },
-    { ticker: 'GOOGL', name: 'Alphabet Inc.', initialLevel: 178.30, weight: 0.334 },
+    { ticker: 'META', name: 'Meta Platforms', initialLevel: 585.20, weight: 0.333 },
+    { ticker: 'AMZN', name: 'Amazon.com', initialLevel: 198.40, weight: 0.333 },
+    { ticker: 'NVDA', name: 'NVIDIA Corp.', initialLevel: 124.80, weight: 0.334 },
   ],
 
   coupon: {
-    rate: 0.092,          // 9.2% p.a.
+    rate: 0.108,          // 10.8% p.a.
     frequency: 'quarterly',
     type: 'conditional',
-    barrierLevel: 0.70,   // 70% of initial
+    barrierLevel: 0.65,   // 65% of initial
     memory: true,
   },
 
   autocall: {
     enabled: true,
-    startMonth: 6,        // first observation month 6
+    startMonth: 6,
     frequency: 'quarterly',
-    triggerLevel: 1.0,    // 100% of initial
-    stepdown: 0.0,        // no stepdown
+    triggerLevel: 1.0,
+    stepdown: 0.0,
   },
 
   barrier: {
-    level: 0.60,          // 60% of initial
-    type: 'european',     // observed at maturity only
+    level: 0.55,          // 55% of initial — 45% downside protection
+    type: 'european',
   },
 
-  cap: null,              // no cap on autocallables
+  cap: null,
 
-  // AI-generated content (filled by API, mocked here)
-  summary: 'This 2-year autocallable note on a worst-of basket of AAPL, MSFT, and GOOGL offers a 9.2% annual contingent coupon with memory, paid quarterly if the worst-performing stock stays above 70% of its initial level. The note can be called early every quarter starting month 6 if all stocks are at or above their initial levels. At maturity, principal is protected unless the worst performer has fallen below the 60% European barrier.',
+  summary: 'This 2-year autocallable note on a worst-of basket of META, AMZN, and NVDA offers a 10.8% annual contingent coupon with memory, paid quarterly if the worst-performing stock stays above 65% of its initial level. The note can be called early every quarter starting month 6 if all stocks are at or above their initial levels. At maturity, principal is protected unless the worst performer has fallen below the 55% European barrier — providing 45% downside cushion.',
 
   sellingPoints: [
-    'High 9.2% annual yield in a low-rate environment',
-    'Memory feature recovers any missed coupon payments',
-    'European barrier observed only at maturity — intraday dips don\'t trigger losses',
-    '40% downside cushion before any principal loss',
-    'Diversified blue-chip basket reduces single-stock risk',
+    'Premium 10.8% annual yield on high-conviction mega-cap tech names',
+    'Memory feature recovers any missed coupon payments when stocks rebound',
+    'European barrier observed only at maturity — intraday volatility doesn\'t trigger losses',
+    '45% downside cushion before any principal loss',
+    'Three of the highest-revenue AI companies in the world — META, AMZN, NVDA',
   ],
 
   riskFactors: [
-    'Worst-of feature: return driven by weakest stock in the basket',
-    'Principal at risk if barrier breached at maturity — loss = stock decline',
-    'No participation in upside beyond coupon payments',
-    'Issuer credit risk (J.P. Morgan)',
-    'Limited secondary market liquidity',
-    'Autocall may shorten tenor, requiring reinvestment in potentially lower-rate environment',
+    'Worst-of feature: return driven by the weakest stock in the basket',
+    'Principal at risk if barrier breached at maturity — loss tracks the worst performer',
+    'No participation in stock upside beyond coupon payments',
+    'Issuer credit risk (Morgan Stanley)',
+    'Limited secondary market liquidity — designed to hold to maturity',
+    'Autocall may shorten tenor, forcing reinvestment in a potentially lower-rate environment',
   ],
 
-  talkTrack: `This note pays you 2.3% every quarter — that's 9.2% annualized — as long as Apple, Microsoft, and Google all stay above 70% of where they started. If any stock dips below that, you skip the coupon but the memory feature means you'll collect all missed payments once they recover. Every quarter starting month 6, if all three stocks are at or above their starting price, the note gets called and you get your principal back plus any owed coupons. At the end of 2 years, you're fully protected unless the worst performer has dropped more than 40% — and that's only checked on the final day, not during the life. It's a strong income play on three of the most liquid names in the market, with meaningful downside protection.`,
+  talkTrack: `This note pays you 2.7% every quarter — that's 10.8% annualized — as long as Meta, Amazon, and NVIDIA all stay above 65% of where they started. Miss a coupon? The memory feature means you collect everything owed once they recover. Every quarter starting month 6, if all three are at or above their starting price, you get your principal back plus any owed coupons. At maturity, you're fully protected unless the worst of the three has dropped more than 45% — and that's only checked on the final day. You're getting a double-digit yield on three of the biggest AI beneficiaries in the market, with nearly half the downside protected.`,
 
   scenarios: [
     {
       name: 'bull',
       description: 'All stocks above initial at month 6',
-      outcome: 'Autocalled at month 6. You receive $1,000,000 + $23,000 coupon (Q1) + $23,000 coupon (Q2) = $1,046,000. Annualized return: 9.2%.',
+      outcome: 'Autocalled at month 6. You receive $1,000,000 + $27,000 coupon (Q1) + $27,000 coupon (Q2) = $1,054,000. Annualized return: 10.8%.',
     },
     {
       name: 'base',
-      description: 'Stocks fluctuate, worst-of stays above 70% through maturity',
-      outcome: 'Full 8 quarterly coupons received. Total return: $1,000,000 + $184,000 = $1,184,000. Total return: 18.4% over 2 years.',
+      description: 'Stocks fluctuate, worst-of stays above 65% through maturity',
+      outcome: 'Full 8 quarterly coupons received. Total return: $1,000,000 + $216,000 = $1,216,000. Total return: 21.6% over 2 years.',
     },
     {
       name: 'bear',
-      description: 'Worst performer ends at 75% (above 60% barrier)',
+      description: 'Worst performer ends at 70% (above 55% barrier)',
       outcome: 'Some coupons missed but recovered via memory. Principal returned in full at maturity. Return depends on recovery timing.',
     },
     {
       name: 'worst',
-      description: 'Worst performer ends at 50% (below 60% barrier)',
-      outcome: 'Barrier breached. You receive stock value: $1,000,000 × 50% = $500,000. Plus any coupons earned. Significant principal loss.',
+      description: 'Worst performer ends at 45% (below 55% barrier)',
+      outcome: 'Barrier breached. You receive stock value: $1,000,000 x 45% = $450,000. Plus any coupons earned. Significant principal loss.',
     },
   ],
 
   howItWorks: [
-    { step: 1, title: 'You invest', description: 'You invest $1,000,000 in the note issued by J.P. Morgan, linked to Apple, Microsoft, and Google.' },
-    { step: 2, title: 'Earn quarterly income', description: 'Every quarter, if all three stocks are above 70% of their starting price, you earn a 2.3% coupon ($23,000). Missed? The memory feature catches you up later.' },
+    { step: 1, title: 'You invest', description: 'You invest $1,000,000 in the note issued by Morgan Stanley, linked to Meta, Amazon, and NVIDIA.' },
+    { step: 2, title: 'Earn quarterly income', description: 'Every quarter, if all three stocks are above 65% of their starting price, you earn a 2.7% coupon ($27,000). Missed? The memory feature catches you up later.' },
     { step: 3, title: 'Early exit possible', description: 'Starting month 6, if all stocks are at or above their starting price, the note is called early and you get your money back plus coupons.' },
-    { step: 4, title: 'At maturity', description: 'After 2 years, if the worst stock is above 60% of its start, you get 100% of your investment back. Below 60%, your return matches that stock\'s performance.' },
+    { step: 4, title: 'At maturity', description: 'After 2 years, if the worst stock is above 55% of its start, you get 100% of your investment back. Below 55%, your return matches that stock\'s performance.' },
   ],
 };
