@@ -1,11 +1,23 @@
 import React, { useState } from 'react';
 import PayoffDiagram from '../components/PayoffDiagram';
 
-export default function FAMode({ product, strings }) {
+// Resolve translated field: supports both string and {en, es} object
+function t(field, lang) {
+  if (field && typeof field === 'object' && !Array.isArray(field)) return field[lang] || field.en;
+  return field;
+}
+function tArr(field, lang) {
+  if (field && typeof field === 'object' && !Array.isArray(field)) return field[lang] || field.en;
+  return field;
+}
+
+export default function FAMode({ product, strings, lang = 'en' }) {
   const [copied, setCopied] = useState(false);
 
+  const talkTrack = t(product.talkTrack, lang);
+
   const copyTalkTrack = () => {
-    navigator.clipboard.writeText(product.talkTrack);
+    navigator.clipboard.writeText(talkTrack);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -14,7 +26,7 @@ export default function FAMode({ product, strings }) {
     <div className="space-y-6">
       {/* Product Summary */}
       <Section title={strings.productSummary}>
-        <p className="text-sm text-text-secondary leading-relaxed">{product.summary}</p>
+        <p className="text-sm text-text-secondary leading-relaxed">{t(product.summary, lang)}</p>
       </Section>
 
       {/* Key Terms Table */}
@@ -60,7 +72,7 @@ export default function FAMode({ product, strings }) {
       {/* Selling Points */}
       <Section title={strings.sellingPoints}>
         <ul className="space-y-2.5">
-          {product.sellingPoints.map((p, i) => (
+          {tArr(product.sellingPoints, lang).map((p, i) => (
             <li key={i} className="text-sm text-text-secondary flex gap-2.5">
               <span className="text-emerald-500 mt-0.5 flex-shrink-0">+</span>
               {p}
@@ -72,7 +84,7 @@ export default function FAMode({ product, strings }) {
       {/* Risk Factors */}
       <Section title={strings.riskFactors}>
         <ul className="space-y-2.5">
-          {product.riskFactors.map((r, i) => (
+          {tArr(product.riskFactors, lang).map((r, i) => (
             <li key={i} className="text-sm text-text-secondary flex gap-2.5">
               <span className="text-red-400 mt-0.5 flex-shrink-0">-</span>
               {r}
@@ -84,7 +96,7 @@ export default function FAMode({ product, strings }) {
       {/* 60-Second Talk Track */}
       <Section title={strings.talkTrack}>
         <div className="bg-bg-surface border border-bg-border rounded-lg p-5 relative">
-          <p className="text-sm text-text-secondary leading-relaxed italic pr-16">{product.talkTrack}</p>
+          <p className="text-sm text-text-secondary leading-relaxed italic pr-16">{talkTrack}</p>
           <button
             onClick={copyTalkTrack}
             className="absolute top-4 right-4 text-xs text-text-muted hover:text-text border border-bg-border hover:border-bg-border-light rounded px-2.5 py-1 transition-all"

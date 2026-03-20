@@ -5,6 +5,7 @@ import TermSheetUpload from './components/TermSheetUpload';
 import FAMode from './modules/FAMode';
 import ClientMode from './modules/ClientMode';
 import Introduction from './modules/Introduction';
+import ChatBox from './components/ChatBox';
 
 const MODES = [
   { id: 'intro', labelKey: 'introMode' },
@@ -158,13 +159,16 @@ function App() {
         )}
 
         {mode === 'fa' && (
-          <FAMode product={product} strings={s} />
+          <FAMode product={product} strings={s} lang={lang} />
         )}
 
         {mode === 'client' && (
-          <ClientMode product={product} strings={s} />
+          <ClientMode product={product} strings={s} lang={lang} />
         )}
       </main>
+
+      {/* Q&A Chat */}
+      <ChatBox strings={s} product={product} mode={mode} />
 
       {/* Term Sheet Modal */}
       {showTermSheetModal && (

@@ -1,13 +1,22 @@
 import React from 'react';
 import PayoffDiagram from '../components/PayoffDiagram';
 
-export default function ClientMode({ product, strings }) {
+// Resolve translated field: supports both string and {en, es} object
+function t(field, lang) {
+  if (field && typeof field === 'object' && !Array.isArray(field)) return field[lang] || field.en;
+  return field;
+}
+
+export default function ClientMode({ product, strings, lang = 'en' }) {
+  const howItWorks = t(product.howItWorks, lang);
+  const scenarios = t(product.scenarios, lang);
+
   return (
     <div className="space-y-6">
       {/* How It Works — step cards */}
       <Section title={strings.howItWorks}>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {product.howItWorks.map((step) => (
+          {howItWorks.map((step) => (
             <div key={step.step} className="bg-bg-surface border border-bg-border rounded-lg p-5">
               <div className="w-7 h-7 rounded-full border border-bg-border-light flex items-center justify-center text-xs font-mono font-semibold text-text-muted mb-3">
                 {step.step}
@@ -27,7 +36,7 @@ export default function ClientMode({ product, strings }) {
       {/* Scenario Cards */}
       <Section title={strings.scenarios}>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {product.scenarios.map((sc) => {
+          {scenarios.map((sc) => {
             const colors = {
               bull: 'border-l-emerald-500',
               base: 'border-l-blue-400',

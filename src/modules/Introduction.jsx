@@ -27,14 +27,6 @@ function HeroSection({ s, onAnalyze }) {
         <InfoPill label={s.pillIssuer} sub={s.pillCreditRisk} />
         <InfoPill label={s.pillNot} sub={s.pillFdicInsured} />
       </div>
-      {onAnalyze && (
-        <button
-          onClick={onAnalyze}
-          className="mt-6 px-5 py-2.5 text-xs font-medium text-text bg-bg-surface border border-bg-border-light hover:border-text-ghost rounded-lg transition-all"
-        >
-          {s.upload} →
-        </button>
-      )}
     </Section>
   );
 }
