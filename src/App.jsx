@@ -4,8 +4,10 @@ import { SAMPLE_PRODUCT } from './lib/mock-data';
 import TermSheetUpload from './components/TermSheetUpload';
 import FAMode from './modules/FAMode';
 import ClientMode from './modules/ClientMode';
+import Introduction from './modules/Introduction';
 
 const MODES = [
+  { id: 'intro', labelKey: 'introMode' },
   { id: 'fa', labelKey: 'faMode' },
   { id: 'client', labelKey: 'clientMode' },
 ];
@@ -25,7 +27,7 @@ function App() {
   }, [dark]);
 
   // App state
-  const [mode, setMode] = useState('fa'); // 'fa' | 'client'
+  const [mode, setMode] = useState('intro'); // 'intro' | 'fa' | 'client'
   const [product, setProduct] = useState(null); // StructuredProduct | null
   const [analyzing, setAnalyzing] = useState(false);
   const [analyzeStep, setAnalyzeStep] = useState(0);
@@ -107,75 +109,92 @@ function App() {
             </div>
           </div>
 
-          {/* Mode tabs — only show when product is loaded */}
-          {product && (
-            <div className="flex gap-0.5 mt-6">
-              {MODES.map((m) => (
+          {/* Mode tabs — always show */}
+          <div className="flex gap-0.5 mt-6">
+            {MODES.map((m) => {
+              // FA and Client tabs disabled until product loaded
+              const disabled = (m.id === 'fa' || m.id === 'client') && !product;
+              return (
                 <button
                   key={m.id}
-                  onClick={() => setMode(m.id)}
+                  onClick={() => !disabled && setMode(m.id)}
                   className={`px-4 py-2 text-xs font-medium rounded-t-md transition-all ${
                     mode === m.id
                       ? 'bg-bg-surface text-text border border-bg-border border-b-bg-surface -mb-px'
-                      : 'text-text-muted hover:text-text-secondary'
+                      : disabled
+                        ? 'text-text-ghost/40 cursor-not-allowed'
+                        : 'text-text-muted hover:text-text-secondary'
                   }`}
                 >
                   {s[m.labelKey]}
                 </button>
-              ))}
-              <div className="flex-1" />
-              <button
-                onClick={handleNewAnalysis}
-                className="px-3 py-1.5 text-xs text-text-muted hover:text-text border border-bg-border hover:border-bg-border-light rounded-md transition-all"
-              >
-                {s.newAnalysis}
-              </button>
-            </div>
-          )}
+              );
+            })}
+            {product && (
+              <>
+                <div className="flex-1" />
+                <button
+                  onClick={handleNewAnalysis}
+                  className="px-3 py-1.5 text-xs text-text-muted hover:text-text border border-bg-border hover:border-bg-border-light rounded-md transition-all"
+                >
+                  {s.newAnalysis}
+                </button>
+              </>
+            )}
+          </div>
         </div>
       </header>
 
       {/* Main content */}
       <main className="max-w-[1440px] mx-auto px-8 py-8">
-        {/* Upload / landing */}
-        {!product && !analyzing && (
-          <TermSheetUpload
-            strings={s}
-            onFileSelect={handleFileSelect}
-            onDemo={handleDemo}
-          />
+        {/* Introduction mode */}
+        {mode === 'intro' && (
+          <Introduction strings={s} />
         )}
 
-        {/* Analyzing state */}
-        {analyzing && (
-          <div className="flex flex-col items-center justify-center min-h-[60vh]">
-            {/* Spinner */}
-            <div className="w-8 h-8 border-2 border-bg-border border-t-text rounded-full animate-spin mb-6" />
-            <p className="text-sm text-text mb-3">{s.analyzing}</p>
-            <div className="flex flex-col items-center gap-1">
-              {s.analyzingSteps.map((step, i) => (
-                <p
-                  key={i}
-                  className={`text-xs transition-all ${
-                    i < analyzeStep ? 'text-text-secondary' : i === analyzeStep ? 'text-text-muted' : 'text-text-ghost/40'
-                  }`}
-                >
-                  {i < analyzeStep ? '\u2713' : i === analyzeStep ? '\u2022' : '\u00B7'} {step}
-                </p>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Product loaded — show FA or Client mode */}
-        {product && !analyzing && (
-          <div>
-            {mode === 'fa' ? (
-              <FAMode product={product} strings={s} />
-            ) : (
-              <ClientMode product={product} strings={s} />
+        {/* FA / Client modes */}
+        {mode !== 'intro' && (
+          <>
+            {/* Upload / landing */}
+            {!product && !analyzing && (
+              <TermSheetUpload
+                strings={s}
+                onFileSelect={handleFileSelect}
+                onDemo={handleDemo}
+              />
             )}
-          </div>
+
+            {/* Analyzing state */}
+            {analyzing && (
+              <div className="flex flex-col items-center justify-center min-h-[60vh]">
+                <div className="w-8 h-8 border-2 border-bg-border border-t-text rounded-full animate-spin mb-6" />
+                <p className="text-sm text-text mb-3">{s.analyzing}</p>
+                <div className="flex flex-col items-center gap-1">
+                  {s.analyzingSteps.map((step, i) => (
+                    <p
+                      key={i}
+                      className={`text-xs transition-all ${
+                        i < analyzeStep ? 'text-text-secondary' : i === analyzeStep ? 'text-text-muted' : 'text-text-ghost/40'
+                      }`}
+                    >
+                      {i < analyzeStep ? '\u2713' : i === analyzeStep ? '\u2022' : '\u00B7'} {step}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Product loaded */}
+            {product && !analyzing && (
+              <div>
+                {mode === 'fa' ? (
+                  <FAMode product={product} strings={s} />
+                ) : (
+                  <ClientMode product={product} strings={s} />
+                )}
+              </div>
+            )}
+          </>
         )}
       </main>
     </div>
