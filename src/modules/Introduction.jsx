@@ -48,59 +48,57 @@ function InfoPill({ label, sub }) {
   );
 }
 
-/* ─── Section 2: Building Blocks — Bond + Options → Equity Underlying ─── */
+/* ─── Section 2: How It Works — equity-focused ─── */
 function BuildingBlocksSection({ s }) {
   return (
-    <Section title={s.buildingBlocks}>
-      <p className="text-xs text-text-muted mb-5">A structured note is built from three components. Your investment is split between a bond and option contracts, linked to an equity underlying.</p>
-      <div className="flex flex-col md:flex-row items-center gap-6">
-        {/* Flow diagram */}
-        <svg viewBox="0 0 520 120" className="w-full max-w-xl h-28 flex-shrink-0">
-          {/* Your Investment */}
-          <rect x="0" y="30" width="100" height="60" rx="6" fill="rgb(var(--bg-surface))" stroke="rgb(var(--text-ghost))" strokeWidth="0.7" />
-          <text x="50" y="55" textAnchor="middle" fontSize="9" fill="rgb(var(--text-secondary))" fontWeight="600">Your</text>
-          <text x="50" y="68" textAnchor="middle" fontSize="9" fill="rgb(var(--text-secondary))" fontWeight="600">Investment</text>
+    <Section title="How It Works">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <StepCard num="1" title="Pick the stocks" desc="You choose the equities — individual names like META, NVDA, AMZN or an index like S&P 500." />
+        <StepCard num="2" title="Set the terms" desc="Define your trade-offs: how much downside protection (buffer), what coupon you earn, and for how long (tenor)." />
+        <StepCard num="3" title="Issuer structures the note" desc="The bank packages equity exposure with embedded derivatives to create the custom risk/return profile." />
+        <StepCard num="4" title="Get paid based on performance" desc="At maturity, your return depends on how the stocks performed relative to the barriers and caps you agreed to." />
+      </div>
 
-          {/* Arrow → */}
-          <line x1="105" y1="60" x2="145" y2="40" stroke="rgb(var(--text-ghost))" strokeWidth="1" />
-          <polygon points="143,36 150,38 144,43" fill="rgb(var(--text-ghost))" />
-          <line x1="105" y1="60" x2="145" y2="80" stroke="rgb(var(--text-ghost))" strokeWidth="1" />
-          <polygon points="143,77 150,82 144,84" fill="rgb(var(--text-ghost))" />
+      {/* Visual: the trade-off */}
+      <div className="mt-6 bg-bg-surface border border-bg-border rounded-lg p-5">
+        <div className="text-xs text-text-ghost uppercase tracking-wider mb-4">The Core Trade-Off</div>
+        <svg viewBox="0 0 600 70" className="w-full max-w-2xl h-16">
+          {/* You give up */}
+          <rect x="0" y="10" width="180" height="50" rx="6" fill="rgb(var(--bg-border))" stroke="rgb(var(--text-ghost))" strokeWidth="0.5" />
+          <text x="90" y="30" textAnchor="middle" fontSize="9" fill="rgb(var(--text-muted))" fontWeight="600">You give up</text>
+          <text x="90" y="46" textAnchor="middle" fontSize="8" fill="rgb(var(--text-ghost))">Unlimited upside + dividends</text>
 
-          {/* Bond block */}
-          <rect x="150" y="10" width="110" height="45" rx="6" fill="rgb(var(--bg-border))" stroke="rgb(var(--text-ghost))" strokeWidth="0.5" />
-          <text x="205" y="30" textAnchor="middle" fontSize="9" fill="rgb(var(--text-secondary))" fontWeight="600">Zero-Coupon Bond</text>
-          <text x="205" y="44" textAnchor="middle" fontSize="8" fill="rgb(var(--text-ghost))">~85–95% of principal</text>
-
-          {/* Options block */}
-          <rect x="150" y="65" width="110" height="45" rx="6" fill="rgb(var(--bg-surface))" stroke="rgb(var(--text-ghost))" strokeWidth="0.5" />
-          <text x="205" y="85" textAnchor="middle" fontSize="9" fill="rgb(var(--text-secondary))" fontWeight="600">Option Contracts</text>
-          <text x="205" y="99" textAnchor="middle" fontSize="8" fill="rgb(var(--text-ghost))">~5–15% shapes payoff</text>
-
-          {/* Arrow → from bond */}
-          <line x1="265" y1="32" x2="310" y2="50" stroke="rgb(var(--text-ghost))" strokeWidth="1" />
-          <text x="290" y="35" fontSize="7" fill="rgb(var(--text-ghost))">protects</text>
-
-          {/* Arrow → from options */}
-          <line x1="265" y1="88" x2="310" y2="70" stroke="rgb(var(--text-ghost))" strokeWidth="1" />
-          <text x="290" y="88" fontSize="7" fill="rgb(var(--text-ghost))">shapes</text>
+          {/* Arrow */}
+          <line x1="190" y1="35" x2="220" y2="35" stroke="rgb(var(--text-ghost))" strokeWidth="1" />
+          <polygon points="218,31 226,35 218,39" fill="rgb(var(--text-ghost))" />
 
           {/* Structured Note */}
-          <rect x="315" y="30" width="100" height="60" rx="6" fill="rgb(var(--bg-border))" stroke="rgb(var(--text-muted))" strokeWidth="0.7" />
-          <text x="365" y="55" textAnchor="middle" fontSize="9" fill="rgb(var(--text))" fontWeight="600">Structured</text>
-          <text x="365" y="68" textAnchor="middle" fontSize="9" fill="rgb(var(--text))" fontWeight="600">Note</text>
+          <rect x="230" y="5" width="140" height="60" rx="6" fill="rgb(var(--bg-border))" stroke="rgb(var(--text-muted))" strokeWidth="0.7" />
+          <text x="300" y="28" textAnchor="middle" fontSize="10" fill="rgb(var(--text))" fontWeight="600">Structured Note</text>
+          <text x="300" y="43" textAnchor="middle" fontSize="8" fill="rgb(var(--text-ghost))">Equity-linked payoff</text>
+          <text x="300" y="55" textAnchor="middle" fontSize="7" fill="rgb(var(--text-ghost))">Issuer credit risk applies</text>
 
-          {/* Arrow → linked to */}
-          <line x1="420" y1="60" x2="455" y2="60" stroke="rgb(var(--text-ghost))" strokeWidth="1" strokeDasharray="3 2" />
-          <polygon points="453,56 460,60 453,64" fill="rgb(var(--text-ghost))" />
+          {/* Arrow */}
+          <line x1="380" y1="35" x2="410" y2="35" stroke="rgb(var(--text-ghost))" strokeWidth="1" />
+          <polygon points="408,31 416,35 408,39" fill="rgb(var(--text-ghost))" />
 
-          {/* Underlying */}
-          <rect x="460" y="35" width="55" height="50" rx="6" fill="none" stroke="rgb(var(--text-ghost))" strokeWidth="0.7" strokeDasharray="3 2" />
-          <text x="487" y="56" textAnchor="middle" fontSize="8" fill="rgb(var(--text-muted))" fontWeight="500">S&P 500</text>
-          <text x="487" y="68" textAnchor="middle" fontSize="7" fill="rgb(var(--text-ghost))">or equity</text>
+          {/* You get */}
+          <rect x="420" y="10" width="180" height="50" rx="6" fill="rgb(var(--bg-border))" stroke="rgb(var(--text-ghost))" strokeWidth="0.5" />
+          <text x="510" y="30" textAnchor="middle" fontSize="9" fill="rgb(var(--text-muted))" fontWeight="600">You get</text>
+          <text x="510" y="46" textAnchor="middle" fontSize="8" fill="rgb(var(--text-ghost))">Downside protection + enhanced income</text>
         </svg>
       </div>
     </Section>
+  );
+}
+
+function StepCard({ num, title, desc }) {
+  return (
+    <div className="bg-bg-surface border border-bg-border rounded-lg p-4">
+      <div className="w-6 h-6 rounded-full border border-bg-border-light flex items-center justify-center text-xs font-mono font-semibold text-text-muted mb-2">{num}</div>
+      <div className="text-xs font-medium text-text mb-1">{title}</div>
+      <p className="text-2xs text-text-muted leading-relaxed">{desc}</p>
+    </div>
   );
 }
 
@@ -247,18 +245,18 @@ function PayoffPlayground({ s }) {
                 <CartesianGrid strokeDasharray="3 3" stroke="rgb(var(--bg-border))" strokeOpacity={0.5} />
                 <XAxis
                   dataKey="underlying"
-                  tick={{ fontSize: 10, fill: 'rgb(var(--text-ghost))' }}
+                  tick={{ fontSize: 12, fill: 'rgb(var(--text-ghost))' }}
                   tickFormatter={(v) => `${v}%`}
                   ticks={[-50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50]}
                 >
-                  <Label value="Underlying Return" position="bottom" offset={0} style={{ fontSize: 10, fill: 'rgb(var(--text-ghost))' }} />
+                  <Label value="Underlying Return" position="bottom" offset={0} style={{ fontSize: 12, fill: 'rgb(var(--text-ghost))' }} />
                 </XAxis>
                 <YAxis
-                  tick={{ fontSize: 10, fill: 'rgb(var(--text-ghost))' }}
+                  tick={{ fontSize: 12, fill: 'rgb(var(--text-ghost))' }}
                   tickFormatter={(v) => `${v}%`}
                   domain={['auto', 'auto']}
                 >
-                  <Label value="Note Return" angle={-90} position="insideLeft" offset={0} style={{ fontSize: 10, fill: 'rgb(var(--text-ghost))' }} />
+                  <Label value="Note Return" angle={-90} position="insideLeft" offset={0} style={{ fontSize: 12, fill: 'rgb(var(--text-ghost))' }} />
                 </YAxis>
                 <Tooltip
                   content={({ active, payload }) => {
@@ -276,7 +274,7 @@ function PayoffPlayground({ s }) {
                 {/* Break-even lines */}
                 <ReferenceLine y={0} stroke="rgb(var(--text-ghost))" strokeDasharray="2 2" strokeOpacity={0.3} />
                 <ReferenceLine x={0} stroke="rgb(var(--text-ghost))" strokeDasharray="2 2" strokeOpacity={0.3}>
-                  <Label value="Point of Investment" position="top" style={{ fontSize: 9, fill: 'rgb(var(--text-ghost))' }} />
+                  <Label value="Point of Investment" position="top" style={{ fontSize: 11, fill: 'rgb(var(--text-ghost))' }} />
                 </ReferenceLine>
 
                 {/* Buffer reference line with label */}
@@ -290,7 +288,7 @@ function PayoffPlayground({ s }) {
                     <Label
                       value={`-${(params.buffer * 100).toFixed(0)}% Buffer`}
                       position="top"
-                      style={{ fontSize: 9, fill: 'rgb(239, 68, 68)' }}
+                      style={{ fontSize: 11, fill: 'rgb(239, 68, 68)' }}
                     />
                   </ReferenceLine>
                 )}
@@ -306,7 +304,7 @@ function PayoffPlayground({ s }) {
                     <Label
                       value={`${(params.cap * 100).toFixed(0)}% Cap`}
                       position="top"
-                      style={{ fontSize: 9, fill: 'rgb(34, 197, 94)' }}
+                      style={{ fontSize: 11, fill: 'rgb(34, 197, 94)' }}
                     />
                   </ReferenceLine>
                 )}
@@ -326,7 +324,7 @@ function PayoffPlayground({ s }) {
                       <Label
                         value={`${maxRet.toFixed(0)}% Max Return`}
                         position="right"
-                        style={{ fontSize: 9, fill: 'rgb(34, 197, 94)' }}
+                        style={{ fontSize: 11, fill: 'rgb(34, 197, 94)' }}
                       />
                     </ReferenceLine>
                   );
@@ -343,7 +341,7 @@ function PayoffPlayground({ s }) {
                     <Label
                       value={`${(params.coupon * 100).toFixed(1)}% Coupon`}
                       position="right"
-                      style={{ fontSize: 9, fill: 'rgb(245, 158, 11)' }}
+                      style={{ fontSize: 11, fill: 'rgb(245, 158, 11)' }}
                     />
                   </ReferenceLine>
                 )}
@@ -360,7 +358,7 @@ function PayoffPlayground({ s }) {
                       <Label
                         value={`${params.leverage}x Upside Leverage`}
                         position="insideTopRight"
-                        style={{ fontSize: 9, fill: 'rgb(var(--text-muted))' }}
+                        style={{ fontSize: 11, fill: 'rgb(var(--text-muted))' }}
                       />
                     </ReferenceLine>
                   );
@@ -372,7 +370,7 @@ function PayoffPlayground({ s }) {
                     <Label
                       value="1x Downside Participation"
                       position="insideBottomLeft"
-                      style={{ fontSize: 9, fill: 'rgb(var(--text-ghost))' }}
+                      style={{ fontSize: 11, fill: 'rgb(var(--text-ghost))' }}
                     />
                   </ReferenceLine>
                 )}
@@ -383,7 +381,7 @@ function PayoffPlayground({ s }) {
                     <Label
                       value={`${(1 / (1 - params.buffer) * 100).toFixed(0)}% Downside Participation`}
                       position="insideBottomLeft"
-                      style={{ fontSize: 9, fill: 'rgb(var(--text-ghost))' }}
+                      style={{ fontSize: 11, fill: 'rgb(var(--text-ghost))' }}
                     />
                   </ReferenceLine>
                 )}
