@@ -44,7 +44,7 @@ export default function PayoffDiagram({ product, strings, showControls = false }
     [effectiveProduct, worstOfLevel]
   );
 
-  const barrierPct = effectiveProduct.barrier.level * 100;
+  const barrierPct = Math.round(effectiveProduct.barrier.level * 100);
   const notional = product.notional;
   const dollarReturn = currentReturn.total * notional;
   const pnl = dollarReturn - notional;
