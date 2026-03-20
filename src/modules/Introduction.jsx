@@ -188,25 +188,21 @@ function PayoffPlayground({ s }) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Chart */}
         <div className="lg:col-span-2">
-          <div className="w-full" style={{ height: 460 }}>
+          <div className="w-full" style={{ height: 440 }}>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={data} margin={{ top: 30, right: 50, left: 20, bottom: 30 }}>
+              <LineChart data={data} margin={{ top: 30, right: 50, left: 20, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgb(var(--bg-border))" strokeOpacity={0.5} />
                 <XAxis
                   dataKey="underlying"
                   tick={{ fontSize: 13, fill: 'rgb(var(--text-ghost))' }}
                   tickFormatter={(v) => `${v}%`}
                   ticks={[-50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50]}
-                >
-                  <Label value={s.underlyingReturn} position="bottom" offset={5} style={{ fontSize: 13, fill: 'rgb(var(--text-muted))' }} />
-                </XAxis>
+                />
                 <YAxis
                   tick={{ fontSize: 13, fill: 'rgb(var(--text-ghost))' }}
                   tickFormatter={(v) => `${v}%`}
                   domain={['auto', 'auto']}
-                >
-                  <Label value={s.noteReturn} angle={-90} position="insideLeft" offset={5} style={{ fontSize: 13, fill: 'rgb(var(--text-muted))' }} />
-                </YAxis>
+                />
                 <Tooltip
                   content={({ active, payload }) => {
                     if (!active || !payload?.length) return null;
@@ -222,9 +218,7 @@ function PayoffPlayground({ s }) {
                 />
                 {/* Break-even lines */}
                 <ReferenceLine y={0} stroke="rgb(var(--text-ghost))" strokeDasharray="2 2" strokeOpacity={0.3} />
-                <ReferenceLine x={0} stroke="rgb(var(--text-ghost))" strokeDasharray="2 2" strokeOpacity={0.3}>
-                  <Label value={s.pointOfInvestment} position="top" offset={8} style={{ fontSize: 13, fill: 'rgb(var(--text-muted))', fontWeight: 500 }} />
-                </ReferenceLine>
+                <ReferenceLine x={0} stroke="rgb(var(--text-ghost))" strokeDasharray="2 2" strokeOpacity={0.3} />
 
                 {/* Buffer reference line */}
                 {params.buffer != null && (
@@ -299,21 +293,17 @@ function PayoffPlayground({ s }) {
                   </ReferenceLine>
                 )}
 
-                {/* Leverage annotation */}
-                {params.leverage != null && params.leverage > 1 && (() => {
-                  const capVal = params.cap ?? 0.10;
-                  const midX = capVal * 50;
-                  return (
-                    <ReferenceLine x={midX} stroke="transparent">
-                      <Label
-                        value={`${params.leverage}x ${s.upsideLeverage}`}
-                        position="insideTopRight"
-                        offset={5}
-                        style={{ fontSize: 13, fill: 'rgb(var(--text-muted))', fontWeight: 500 }}
-                      />
-                    </ReferenceLine>
-                  );
-                })()}
+                {/* Leverage annotation — placed on upside slope */}
+                {params.leverage != null && params.leverage > 1 && (
+                  <ReferenceLine x={3} stroke="transparent">
+                    <Label
+                      value={`${params.leverage}x ${s.upsideLeverage}`}
+                      position="insideBottomRight"
+                      offset={15}
+                      style={{ fontSize: 13, fill: 'rgb(var(--text-muted))', fontWeight: 500 }}
+                    />
+                  </ReferenceLine>
+                )}
 
                 {/* 1x downside label for return enhanced */}
                 {selectedType === 'returnEnhanced' && (
@@ -363,7 +353,7 @@ function PayoffPlayground({ s }) {
             </ResponsiveContainer>
           </div>
           {/* Legend */}
-          <div className="flex items-center gap-6 mt-3">
+          <div className="flex items-center gap-6 -mt-1">
             <div className="flex items-center gap-2">
               <div className="w-8 h-0.5 bg-text rounded" />
               <span className="text-xs text-text-muted">{s.noteReturn}</span>
